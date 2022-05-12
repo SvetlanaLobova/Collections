@@ -14,23 +14,22 @@ namespace Collections.Controllers
         }
         public async Task<ActionResult> Index(int id, string tag, string name, SortState sortOrder = SortState.NameAsc)
         {
-            if (tag != null || name != null)
+            var items = _db.Items.Where(x => x.CollectionId == id);
+            if (tag != null && name != null)
             {
-                var items = _db.Items.Where(x => x.CollectionId == id);
-                items = items.Where(s => s.Name.Contains(name) || s.Tag.Contains(tag));
+                items = items.Where(s => s.Name.Contains(name) && s.Tag.Contains(tag));
                 return View(items);
             }
             else
             {
-                var users = _db.Items.Where(x => x.CollectionId == id);
                 ViewData["NameSort"] = sortOrder == SortState.NameAsc ? SortState.NameDesc : SortState.NameAsc;
                 ViewData["TagSort"] = sortOrder == SortState.TagAsc ? SortState.TagDesc : SortState.TagAsc;
-                users = sortOrder switch
+                items = sortOrder switch
                 {
-                    SortState.NameDesc => users.OrderByDescending(s => s.Name),
-                    SortState.TagAsc => users.OrderBy(s => s.Tag),
-                    SortState.TagDesc => users.OrderByDescending(s => s.Tag),
-                    _ => users.OrderBy(s => s.Name),
+                    SortState.NameDesc => items.OrderByDescending(s => s.Name),
+                    SortState.TagAsc => items.OrderBy(s => s.Tag),
+                    SortState.TagDesc => items.OrderByDescending(s => s.Tag),
+                    _ => items.OrderBy(s => s.Name),
                 };
 
                 GlobalCollection.CollectionId = id;
@@ -42,7 +41,7 @@ namespace Collections.Controllers
                 GlobalCollection.FieldName2 = field.FieldName2;
                 GlobalCollection.TypeField2 = field.TypeField2;
 
-                return View(await users.AsNoTracking().ToListAsync());
+                return View(await items.AsNoTracking().ToListAsync());
             }
         }
         public ActionResult Create()
