@@ -1,0 +1,78 @@
+﻿@model IEnumerable<AppUser>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="nav-item">List of users</h2>
+        </div>
+    </div>
+    <br /><br />
+
+<table class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                User name
+            </th>
+            <th>
+                User email
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Role
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in Model)
+        {
+            <tr>
+                <td>
+                    @obj.UserName
+                </td>
+                <td>
+                    @obj.Email
+                </td>
+                <td>
+                    @obj.Status
+                </td>
+                <td>
+                    @obj.UserRole
+                </td>
+                <td>
+                    <div role="group">
+                        <a asp-controller="User" asp-action="Block" asp-route-id="@obj.Id">Block</a>
+                        <a asp-controller="User" asp-action="Unblock" asp-route-id="@obj.Id">Unblock</a>
+                    </div>
+                </td>
+                <td>
+                    <div role="group">
+                        <a asp-controller="User" asp-action="AppointAdmin" asp-route-id="@obj.Id">Admin</a>
+                        <a asp-controller="User" asp-action="AppointUser" asp-route-id="@obj.Id">User</a>
+                    </div>
+                </td>
+                <td width="10%">
+                    <div class="w-100 btn-group" role="group">
+                        <a asp-controller="Collection" asp-action="Index" asp-route-id="@obj.Id"
+                        class="btn btn-primary mx-2">Details</a>
+                    </div>
+                </td>
+                <td width="13%">
+                    @if (obj.UserRole == "user")
+                    {
+                        <div class="w-100 btn-group" role="group">
+                            <a asp-controller="User" asp-action="Del" asp-route-id="@obj.Id"
+                            class="btn btn-danger mx-2"> <i class="bi bi-trash3"> </i>Delete</a>
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>

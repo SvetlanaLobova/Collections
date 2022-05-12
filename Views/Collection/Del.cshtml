@@ -1,0 +1,15 @@
+﻿@model Collection
+
+<form method="post" asp-action="Del">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="nav-item">Do you want to delete the collection?</h2>
+            <hr />
+        </div>
+        <button type="submit" class="btn btn-danger style="width:150px">Delete</button>
+        <a asp-controller="Collection" asp-action="Index" asp-route-id="@GlobalAppUserId.UserId" class="btn btn-secondary" style="width:150px">
+            Back to list
+        </a>
+    </div>
+</form>
+

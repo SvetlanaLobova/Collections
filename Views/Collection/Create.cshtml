@@ -1,0 +1,66 @@
+﻿@model Collection
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="nav-item">Create collection</h2>
+            <hr />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <div>
+                <label asp-for="Theme">Theme</label>
+                <select asp-for="Theme" asp-items="Html.GetEnumSelectList<CollectionTheme>()"></select>
+            </div>
+        </div>
+        <br /><br />
+        <p>You can add up to 3 item properties in this collection.</p>
+        <div class="mb-3">
+            <div>
+                <label asp-for="FieldName">Optional property №1 for item</label>
+                <input asp-for="FieldName" class="form-control"/>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div>
+                <label asp-for="TypeField">Property type:&nbsp;</label>
+                <select asp-for="TypeField" asp-items="Html.GetEnumSelectList<FieldType>()"></select>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div>
+                <label asp-for="FieldName1">Optional property №2 for item</label>
+                <input asp-for="FieldName1" class="form-control" />
+                </div>
+        </div>
+        <div class="mb-3">
+            <div>
+                <label asp-for="TypeField1">Property type:&nbsp;</label>
+                <select asp-for="TypeField1" asp-items="Html.GetEnumSelectList<FieldType>()"></select>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div>
+                <label asp-for="FieldName2">Optional property №3 for item</label>
+                <input asp-for="FieldName2" class="form-control" />
+                </div>
+        </div>
+        <div class="mb-3">
+            <div>
+                <label asp-for="TypeField2">Property type:&nbsp;</label>
+                <select asp-for="TypeField2" asp-items="Html.GetEnumSelectList<FieldType>()"></select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:150px">Create</button>
+        <a asp-controller="Collection" asp-action="Index" asp-route-id="@GlobalAppUserId.UserId" class="btn btn-secondary" style="width:150px">
+            Back to list
+        </a>
+    </div>
+</form>

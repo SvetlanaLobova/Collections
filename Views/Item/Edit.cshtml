@@ -1,0 +1,142 @@
+﻿@model Item
+
+<form method="post" asp-action="Edit">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="nav-item">Edit Item</h2>
+            <hr />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="Tag"></label>
+            <input asp-for="Tag" class="form-control" />
+        </div>
+        @if (GlobalCollection.FieldName != null && GlobalCollection.TypeField != null)
+        {
+            switch (GlobalCollection.TypeField)
+                {
+                    case FieldType.Numeric:
+                        <div class="mb-3">
+                            <label asp-for="SpecialInt">@GlobalCollection.FieldName</label>
+                            <input asp-for="SpecialInt" type="number" class="form-control" />
+                        </div>
+                        break;
+                    case FieldType.String:
+                        <div class="mb-3">
+                            <label asp-for="SpecialString">@GlobalCollection.FieldName</label>
+                            <input asp-for="SpecialString" class="form-control" />
+                        </div>
+                        break;
+                    case FieldType.Text:
+                        <div class="mb-3">
+                            <label asp-for="SpecialText">@GlobalCollection.FieldName</label>
+                            <input asp-for="SpecialText" class="form-control" />
+                        </div>
+                        break;
+                    case FieldType.Date:
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label asp-for="SpecialDataType" class="control-label">@GlobalCollection.FieldName</label>
+                                <input asp-for="SpecialDataType" class="form-control" />
+                                <span asp-validation-for="SpecialDataType" class="text-danger"></span>
+                            </div>
+                        </div>
+                        break;
+                    case FieldType.TrueFalse:
+                        <div class="mb-3">
+                            <span>@GlobalCollection.FieldName</span>
+                            <input checked="checked" name="SpecialBool" type="checkbox" value="true" />
+                            <input name="SpecialBool" type="hidden" value="false" />
+                        </div>
+                        break;
+                }
+        }
+        @if (GlobalCollection.FieldName1 != null && GlobalCollection.TypeField1 != null)
+        {
+            switch (GlobalCollection.TypeField1)
+                {
+                    case FieldType.Numeric:
+                        <div class="mb-3">
+                            <label asp-for="SpecialInt1">@GlobalCollection.FieldName1</label>
+                            <input asp-for="SpecialInt1" type="number" class="form-control" />
+                        </div>
+                        break;
+                    case FieldType.String:
+                        <div class="mb-3">
+                            <label asp-for="SpecialString1">@GlobalCollection.FieldName1</label>
+                            <input asp-for="SpecialString1" class="form-control" />
+                        </div>
+                        break;
+                    case FieldType.Text:
+                        <div class="mb-3">
+                            <label asp-for="SpecialText1">@GlobalCollection.FieldName1</label>
+                            <input asp-for="SpecialText1" class="form-control" />
+                        </div>
+                        break;
+                    case FieldType.Date:
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label asp-for="SpecialDataType1" class="control-label">@GlobalCollection.FieldName1</label>
+                                <input asp-for="SpecialDataType1" class="form-control" />
+                                <span asp-validation-for="SpecialDataType" class="text-danger"></span>
+                            </div>
+                        </div>
+                        break;
+                    case FieldType.TrueFalse:
+                        <div class="mb-3">
+                            <span>@GlobalCollection.FieldName1</span>
+                            <input checked="checked" name="SpecialBool1" type="checkbox" value="true" />
+                            <input name="SpecialBool1" type="hidden" value="false" />
+                        </div>
+                        break;
+                }
+        }
+        @if (GlobalCollection.FieldName2 != null && GlobalCollection.TypeField2 != null)
+        {
+            switch (GlobalCollection.TypeField2)
+                {
+                    case FieldType.Numeric:
+                        <div class="mb-3">
+                            <label asp-for="SpecialInt2">@GlobalCollection.FieldName2</label>
+                            <input asp-for="SpecialInt2" type="number" class="form-control" />
+                        </div>
+                        break;
+                    case FieldType.String:
+                        <div class="mb-3">
+                            <label asp-for="SpecialString2">@GlobalCollection.FieldName2</label>
+                            <input asp-for="SpecialString2" class="form-control" />
+                        </div>
+                        break;
+                    case FieldType.Text:
+                        <div class="mb-3">
+                            <label asp-for="SpecialText2">@GlobalCollection.FieldName2</label>
+                            <input asp-for="SpecialText2" class="form-control" />
+                        </div>
+                        break;
+                    case FieldType.Date:
+                        <div class="mb-3">
+                            <div class="form-group">
+                                <label asp-for="SpecialDataType2" class="control-label">@GlobalCollection.FieldName2</label>
+                                <input asp-for="SpecialDataType2" class="form-control" />
+                                <span asp-validation-for="SpecialDataType2" class="text-danger"></span>
+                            </div>
+                        </div>
+                        break;
+                    case FieldType.TrueFalse:
+                        <div class="mb-3">
+                            <span>@GlobalCollection.FieldName2</span>
+                            <input checked="checked" name="SpecialBool2" type="checkbox" value="true" />
+                            <input name="SpecialBool2" type="hidden" value="false" />
+                        </div>
+                        break;
+                }
+        }
+        <button type="submit" class="btn btn-primary" style="width:150px">Update</button>
+        <a asp-controller="Item" asp-action="Index" asp-route-id="@GlobalCollection.CollectionId" class="btn btn-secondary" style="width:150px">
+            Back to list
+        </a>
+    </div>
+</form>

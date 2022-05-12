@@ -1,0 +1,183 @@
+﻿@model IEnumerable<Item>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="nav-item">List of item</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Item" asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus"></i> &nbsp; Create new item
+            </a>
+        </div>
+        <div class="col-12 text-end">
+            <a asp-controller="Collection" asp-action="Index" asp-route-id="@GlobalAppUserId.UserId" class="btn btn-primary">Back</a>
+        </div>
+    </div>
+    <br />
+    <form method="get" class="d-flex" style="width:50%">
+        <label class="control-label">Name:&nbsp;</label>
+        <input name="name" class="form-control" />
+ 
+        <label class="control-label">&nbsp;Tag:&nbsp;</label>
+        <input name="tag" class="form-control" />
+ 
+        <input type="submit" value="Filter" class="btn btn-primary mx-2" />
+    </form>
+    <br />
+<table class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                <a asp-controller="Item" asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">
+                    Item name
+                </a>                
+            </th>
+            <th>
+                <a asp-controller="Item" asp-action="Index" asp-route-sortOrder="@ViewBag.TagSort">
+                    Tag
+                </a>
+            </th>
+            @if (GlobalCollection.FieldName != null && GlobalCollection.TypeField != null)
+            {
+                <th>
+                    @GlobalCollection.FieldName
+                </th>
+            }
+            @if (GlobalCollection.FieldName1 != null && GlobalCollection.TypeField1 != null)
+            {
+                <th>
+                    @GlobalCollection.FieldName1
+                </th>
+            }
+            @if (GlobalCollection.FieldName2 != null && GlobalCollection.TypeField2 != null)
+            {
+                <th>
+                    @GlobalCollection.FieldName2
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in Model)
+        {
+            <tr>
+                <td>
+                    @obj.Name
+                </td>
+                <td>
+                    @obj.Tag
+                </td>
+                @if (GlobalCollection.FieldName != null && GlobalCollection.TypeField != null)
+                {
+                    switch (GlobalCollection.TypeField)
+                    {
+                        case FieldType.Numeric:
+                            <td>
+                                @obj.SpecialInt
+                            </td>
+                            break;
+                        case FieldType.String:
+                            <td>
+                                @obj.SpecialString
+                            </td>
+                            break;
+                        case FieldType.Text:
+                            <td>
+                                @obj.SpecialText
+                            </td>    
+                            break;
+                        case FieldType.Date:
+                            <td>
+                                @obj.SpecialDataType
+                            </td>
+                            break;
+                        case FieldType.TrueFalse:
+                            <td>
+                                @obj.SpecialBool
+                            </td>
+                            break;
+                    }
+                }
+                @if (GlobalCollection.FieldName1 != null && GlobalCollection.TypeField1 != null)
+                {
+                    switch (GlobalCollection.TypeField1)
+                    {
+                        case FieldType.Numeric:
+                            <td>
+                                @obj.SpecialInt1
+                            </td>
+                            break;
+                        case FieldType.String:
+                            <td>
+                                @obj.SpecialString1
+                            </td>
+                            break;
+                        case FieldType.Text:
+                            <td>
+                                @obj.SpecialText1
+                            </td>    
+                            break;
+                        case FieldType.Date:
+                            <td>
+                                @obj.SpecialDataType1
+                            </td>
+                            break;
+                        case FieldType.TrueFalse:
+                            <td>
+                                @obj.SpecialBool1
+                            </td>
+                            break;
+                    }
+                }
+                @if (GlobalCollection.FieldName2 != null && GlobalCollection.TypeField2 != null)
+                {
+                    switch (GlobalCollection.TypeField2)
+                    {
+                        case FieldType.Numeric:
+                            <td>
+                                @obj.SpecialInt2
+                            </td>
+                            break;
+                        case FieldType.String:
+                            <td>
+                                @obj.SpecialString2
+                            </td>
+                            break;
+                        case FieldType.Text:
+                            <td>
+                                @obj.SpecialText2
+                            </td>    
+                            break;
+                        case FieldType.Date:
+                            <td>
+                                @obj.SpecialDataType2
+                            </td>
+                            break;
+                        case FieldType.TrueFalse:
+                            <td>
+                                @obj.SpecialBool2
+                            </td>
+                            break;
+                    }
+                }
+                <td width="11%">
+                    <div class="w-100 btn-group" role="group">
+                        <a asp-controller="Item" asp-action="Edit" asp-route-id="@obj.Id"
+                        class="btn btn-primary mx-2"> <i class="bi bi-pencil"> </i>Edit</a>
+                    </div>
+                </td>
+                <td width="13%">
+                    <div class="w-100 btn-group" role="group">
+                        <a asp-controller="Item" asp-action="Del" asp-route-id="@obj.Id"
+                        class="btn btn-danger mx-2"> <i class="bi bi-trash3"> </i>Delete</a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
