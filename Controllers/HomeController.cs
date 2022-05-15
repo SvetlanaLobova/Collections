@@ -13,13 +13,8 @@ namespace Collections.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Collection> objCollectionList = _db.Collections;
+            var objCollectionList = _db.Collections;
             return View(objCollectionList);
-        }
-        public IActionResult Details(int id)
-        {
-            IEnumerable<Item> objItemList = _db.Items.Where(x => x.CollectionId == id).ToList();
-            return View(objItemList);
         }
     }
 }

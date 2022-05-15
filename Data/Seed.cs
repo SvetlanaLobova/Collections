@@ -28,7 +28,8 @@ namespace Collections.Data
                     {
                         UserName = "svetlana_vecherova",
                         Email = adminUserEmail,
-                        EmailConfirmed = true
+                        Status = Status.Active,
+                        UserRole = "admin"
                     };
                     await userManager.CreateAsync(newAdminUser, "Coding@1234?");
                     await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);

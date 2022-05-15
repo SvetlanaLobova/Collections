@@ -18,15 +18,16 @@ namespace Collections.Controllers
             {
                 GlobalAppUserId.UserId = id;
             }
-            IEnumerable<Collection> objCollectionsList = _db.Collections.Where(x => x.UserCollectionId == GlobalAppUserId.UserId).ToList();
+            var objCollectionsList = _db.Collections.Where(x => x.UserCollectionId == GlobalAppUserId.UserId);
             return View(objCollectionsList);
         }
+
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Create(string Name, string Description, CollectionTheme Theme, string? FieldName, FieldType? TypeField, string? FieldName1, FieldType? TypeField1, string? FieldName2, FieldType? TypeField2)
         {
             if (ModelState.IsValid)
@@ -37,13 +38,14 @@ namespace Collections.Controllers
             }
             return View();
         }
+
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var collectionFromDb = _db.Collections.Find(id);
             return View(collectionFromDb);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Edit(string Name, string Description, CollectionTheme Theme, int id)
         {
             if (ModelState.IsValid)
@@ -59,13 +61,13 @@ namespace Collections.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Del(int id)
         {
             var collectionFromDb = _db.Collections.Find(id);
             return View(collectionFromDb);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Del(Collection obj)
         {
             _db.Collections.Remove(obj);

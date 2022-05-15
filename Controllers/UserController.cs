@@ -16,16 +16,17 @@ namespace Collections.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<AppUser> objAppUserList = _db.AppUsers;
+            var objAppUserList = _db.AppUsers;
             return View(objAppUserList);
         }
+
         public async Task<IActionResult> AppointAdmin(string id)
         {
             var user = _db.AppUsers.Find(id);
             user.UserRole = "admin";
             await _userManager.RemoveFromRoleAsync(user, UserRoles.User);
             await _userManager.AddToRoleAsync(user, UserRoles.Admin);
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("Index");
         }
         public async Task<IActionResult> AppointUser(string id)
         {
@@ -33,35 +34,37 @@ namespace Collections.Controllers
             user.UserRole = "user";
             await _userManager.RemoveFromRoleAsync(user, UserRoles.Admin);
             await _userManager.AddToRoleAsync(user, UserRoles.User);
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("Index");
         }
-        public async Task<IActionResult> Block(string id)
+
+        public IActionResult Block(string id)
         {
             var user = _db.AppUsers.Find(id);
             user.Status = Status.Blocked;
             _db.SaveChanges();
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("Index");
         }
         public IActionResult Unblock(string id)
         {
             var user = _db.AppUsers.Find(id);
             user.Status = Status.Active;
             _db.SaveChanges();
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("Index");
         }
+
+        [HttpGet]
         public IActionResult Del(string id)
         {
             var appuserFromDb = _db.AppUsers.Find(id);
             return View(appuserFromDb);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Del(AppUser obj)
         {
             var user = _db.AppUsers.Find(obj.Id);
             _db.AppUsers.Remove(user);
             _db.SaveChanges();
-            return RedirectToAction("Index", "User");
+            return RedirectToAction("Index");
         }
     }
 }

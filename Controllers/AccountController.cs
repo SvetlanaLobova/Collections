@@ -14,6 +14,7 @@ namespace Collections.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -26,15 +27,13 @@ namespace Collections.Controllers
             if (!ModelState.IsValid) return View(loginViewModel);
             
             var user = await _userManager.FindByEmailAsync(loginViewModel.EmailAddress);
-            if (user.Status == Status.Active)
+            if (user != null)
             {
-                if (user != null)
+                if (user.Status == Status.Active)
                 {
-                    //User is found, check password
                     var passwordCheck = await _userManager.CheckPasswordAsync(user, loginViewModel.Password);
                     if (passwordCheck)
                     {
-                        //Password correct
                         var result = await _signInManager.PasswordSignInAsync(user, loginViewModel.Password, false, false);
                         if (result.Succeeded)
                         {
@@ -42,17 +41,14 @@ namespace Collections.Controllers
                             return RedirectToAction("Index", "Home");
                         }
                     }
-                    //Password is incorrect
                     TempData["Error"] = "Wrong credentials. Please, try again";
                     return View(loginViewModel);
                 }
-                //User not found
-                TempData["Error"] = "Wrong credentials. Please, try again";
+                TempData["Error"] = "Your account is blocked";
                 return View(loginViewModel);
             }
-            TempData["Error"] = "Your account is blocked";
+            TempData["Error"] = "Wrong credentials. Please, try again";
             return View(loginViewModel);
-
         }
 
         [HttpGet]
@@ -61,7 +57,6 @@ namespace Collections.Controllers
             var response = new RegisterViewModel();
             return View(response);
         }
-
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel)
         {
@@ -71,6 +66,12 @@ namespace Collections.Controllers
             if (user != null)
             {
                 TempData["Error"] = "This email address is already in use";
+                return View(registerViewModel);
+            }
+            var user1 = await _userManager.FindByNameAsync(registerViewModel.UserName);
+            if (user1 != null)
+            {
+                TempData["Error"] = "This username is already in use";
                 return View(registerViewModel);
             }
 
@@ -84,17 +85,20 @@ namespace Collections.Controllers
             var newUserResponse = await _userManager.CreateAsync(newUser, registerViewModel.Password);
 
             if (newUserResponse.Succeeded)
+            {
                 await _userManager.AddToRoleAsync(newUser, UserRoles.User);
-
-            TempData["Notification"] = "Registration completed successfully! Sign in.";
-            return RedirectToAction("Login", "Account");
+                TempData["Notification"] = "Registration completed successfully! Sign in.";
+                return RedirectToAction("Login", "Account");
+            }
+            return RedirectToAction("Register", "Account");
         }
 
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            GlobalAppUserId.UserId = null;
+            return RedirectToAction("Login", "Account");
         }
     }
 }

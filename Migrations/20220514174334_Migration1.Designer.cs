@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Collections.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220509205526_AddMigrationDB5")]
-    partial class AddMigrationDB5
+    [Migration("20220514174334_Migration1")]
+    partial class Migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.4")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -79,6 +79,10 @@ namespace Collections.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("UserRole")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -106,6 +110,12 @@ namespace Collections.Migrations
                     b.Property<string>("FieldName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("FieldName1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FieldName2")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -114,6 +124,12 @@ namespace Collections.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("TypeField")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypeField1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypeField2")
                         .HasColumnType("int");
 
                     b.Property<string>("UserCollectionId")
@@ -125,6 +141,34 @@ namespace Collections.Migrations
                     b.HasIndex("UserCollectionId");
 
                     b.ToTable("Collections");
+                });
+
+            modelBuilder.Entity("Collections.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Collections.Models.Item", b =>
@@ -191,9 +235,15 @@ namespace Collections.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CollectionId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Items");
                 });
@@ -342,6 +392,25 @@ namespace Collections.Migrations
                     b.Navigation("AppUser");
                 });
 
+            modelBuilder.Entity("Collections.Models.Comment", b =>
+                {
+                    b.HasOne("Collections.Models.Item", "ItemComment")
+                        .WithMany("Comments")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Collections.Models.AppUser", "UserComment")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ItemComment");
+
+                    b.Navigation("UserComment");
+                });
+
             modelBuilder.Entity("Collections.Models.Item", b =>
                 {
                     b.HasOne("Collections.Models.Collection", "CollectionItem")
@@ -350,7 +419,15 @@ namespace Collections.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Collections.Models.AppUser", "UserItem")
+                        .WithMany("Items")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("CollectionItem");
+
+                    b.Navigation("UserItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -407,11 +484,20 @@ namespace Collections.Migrations
             modelBuilder.Entity("Collections.Models.AppUser", b =>
                 {
                     b.Navigation("Collections");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Collections.Models.Collection", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Collections.Models.Item", b =>
+                {
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

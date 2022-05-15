@@ -12,7 +12,7 @@ namespace Collections.Controllers
         {
             _db = db;
         }
-        public async Task<ActionResult> Index(int id, string tag, string name, SortState sortOrder = SortState.NameAsc)
+        public async Task<IActionResult> Index(int id, string tag, string name, SortState sortOrder = SortState.NameAsc)
         {
             var items = _db.Items.Where(x => x.CollectionId == id);
             if (tag != null && name != null)
@@ -44,13 +44,14 @@ namespace Collections.Controllers
                 return View(await items.AsNoTracking().ToListAsync());
             }
         }
-        public ActionResult Create()
+
+        [HttpGet]
+        public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(string Name, string Tag, int? SpecialInt, int? SpecialInt1, 
+        public IActionResult Create(string Name, string Tag, int? SpecialInt, int? SpecialInt1, 
             int? SpecialInt2, string? SpecialString, string? SpecialString1, string? SpecialString2, 
             string? SpecialText, string? SpecialText1, string? SpecialText2, DateTime? SpecialDataType, 
             DateTime? SpecialDataType1, DateTime? SpecialDataType2, bool? SpecialBool, bool? SpecialBool1, 
@@ -58,7 +59,7 @@ namespace Collections.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Items.Add(new Item { Name = Name, Tag = Tag, CollectionId = GlobalCollection.CollectionId, 
+                _db.Items.Add(new Item { Name = Name, Tag = Tag, CollectionId = GlobalCollection.CollectionId, UserId = GlobalAppUserId.UserId,
                     SpecialInt = SpecialInt, SpecialInt1 = SpecialInt1, SpecialInt2 = SpecialInt2, 
                     SpecialString = SpecialString, SpecialString1 = SpecialString1, SpecialString2 = SpecialString2,
                     SpecialText = SpecialText, SpecialText1 = SpecialText1, SpecialText2 = SpecialText2,
@@ -67,16 +68,17 @@ namespace Collections.Controllers
                 _db.SaveChanges();
                 return RedirectToAction("Index", new { id = GlobalCollection.CollectionId });
             }
-            return RedirectToAction("Create", "Item");
+            return View();
         }
-        public ActionResult Edit(int id)
+
+        [HttpGet]
+        public IActionResult Edit(int id)
         {
             var itemFromDb = _db.Items.Find(id);
             return View(itemFromDb);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(string Name, string Tag, int id, int? SpecialInt, int? SpecialInt1,
+        public IActionResult Edit(string Name, string Tag, int id, int? SpecialInt, int? SpecialInt1,
             int? SpecialInt2, string? SpecialString, string? SpecialString1, string? SpecialString2,
             string? SpecialText, string? SpecialText1, string? SpecialText2, DateTime? SpecialDataType,
             DateTime? SpecialDataType1, DateTime? SpecialDataType2, bool? SpecialBool, bool? SpecialBool1,
@@ -107,14 +109,15 @@ namespace Collections.Controllers
             }
             return View();
         }
-        public ActionResult Del(int id)
+
+        [HttpGet]
+        public IActionResult Del(int id)
         {
             var itemFromDb = _db.Items.Find(id);
             return View(itemFromDb);
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Del(Item obj)
+        public IActionResult Del(Item obj)
         {
             _db.Items.Remove(obj);
             _db.SaveChanges();
@@ -122,3 +125,4 @@ namespace Collections.Controllers
         }
     }
 }
+

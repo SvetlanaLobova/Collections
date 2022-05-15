@@ -3,6 +3,27 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Collections.Models
 {
+    public class Collection
+    {
+        [Key]
+        public int Id { get; set; }
+        [Required]
+        public string Name { get; set; }
+        public string? Description { get; set; }
+        public CollectionTheme Theme { get; set; }
+        public string? FieldName { get; set; }
+        public FieldType? TypeField { get; set; }
+        public string? FieldName1 { get; set; }
+        public FieldType? TypeField1 { get; set; }
+        public string? FieldName2 { get; set; }
+        public FieldType? TypeField2 { get; set; }
+        public virtual List<Item> Items { get; set; } = new List<Item>();
+
+        [ForeignKey("AppUser")]
+        [Required]
+        public string UserCollectionId { get; set; }
+        public AppUser AppUser { get; set; }
+    }
     public enum CollectionTheme
     {
         [Display(Name = "Books")]
@@ -36,27 +57,6 @@ namespace Collections.Models
         Date,
         [Display(Name = "True/False")]
         TrueFalse
-    }
-    public class Collection
-    {
-        [Key]
-        public int Id { get; set; }
-        [Required]
-        public string Name { get; set; }
-        public string? Description { get; set; }
-        public CollectionTheme Theme { get; set; }
-        public virtual List<Item> Items { get; set; } = new List<Item>();
-        public string? FieldName { get; set; }
-        public FieldType? TypeField { get; set; }
-        public string? FieldName1 { get; set; }
-        public FieldType? TypeField1 { get; set; }
-        public string? FieldName2 { get; set; }
-        public FieldType? TypeField2 { get; set; }
-
-        [ForeignKey("AppUser")]
-        [Required]
-        public string UserCollectionId { get; set; }
-        public AppUser AppUser { get; set; }
     }
     public static class GlobalCollection
     {

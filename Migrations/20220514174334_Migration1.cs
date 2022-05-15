@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Collections.Migrations
 {
-    public partial class AddMigrationDB : Migration
+    public partial class Migration1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,6 +28,8 @@ namespace Collections.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    UserRole = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -94,8 +96,8 @@ namespace Collections.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -139,8 +141,8 @@ namespace Collections.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -163,6 +165,12 @@ namespace Collections.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Theme = table.Column<int>(type: "int", nullable: false),
+                    FieldName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeField = table.Column<int>(type: "int", nullable: true),
+                    FieldName1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeField1 = table.Column<int>(type: "int", nullable: true),
+                    FieldName2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeField2 = table.Column<int>(type: "int", nullable: true),
                     UserCollectionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -184,15 +192,62 @@ namespace Collections.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Tag = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CollectionId = table.Column<int>(type: "int", nullable: false)
+                    SpecialInt = table.Column<int>(type: "int", nullable: true),
+                    SpecialInt1 = table.Column<int>(type: "int", nullable: true),
+                    SpecialInt2 = table.Column<int>(type: "int", nullable: true),
+                    SpecialString = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SpecialString1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SpecialString2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SpecialText = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SpecialText1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SpecialText2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SpecialDataType = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SpecialDataType1 = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SpecialDataType2 = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    SpecialBool = table.Column<bool>(type: "bit", nullable: true),
+                    SpecialBool1 = table.Column<bool>(type: "bit", nullable: true),
+                    SpecialBool2 = table.Column<bool>(type: "bit", nullable: true),
+                    CollectionId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Items", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Items_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Items_Collections_CollectionId",
                         column: x => x.CollectionId,
                         principalTable: "Collections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Comments_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -242,9 +297,24 @@ namespace Collections.Migrations
                 column: "UserCollectionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_ItemId",
+                table: "Comments",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserId",
+                table: "Comments",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Items_CollectionId",
                 table: "Items",
                 column: "CollectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Items_UserId",
+                table: "Items",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -265,10 +335,13 @@ namespace Collections.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Items");
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Items");
 
             migrationBuilder.DropTable(
                 name: "Collections");
