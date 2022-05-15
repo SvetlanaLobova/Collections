@@ -26,6 +26,8 @@
     <thead>
         <tr>
             <th>
+            </th>
+            <th>
                 Collection name
             </th>
             <th>
@@ -40,6 +42,18 @@
         @foreach(var obj in Model)
         {
             <tr>
+                <td width="10%">
+                    <div class="card">
+                        @if(@obj.Image != null)
+                        {
+                            <img class="card-img-top" src="@obj.Image" alt="Card image cap">   
+                        }
+                        else
+                        {
+                            <img class="card-img-top" src="https://res.cloudinary.com/dzoxgvwuh/image/upload/v1652649626/06-psevdo-pustaya-ava_bsj8x5.jpg" alt="Card image cap">   
+                        }
+                    </div>
+                </td>
                 <td>
                     @obj.Name
                 </td>
@@ -51,7 +65,7 @@
                 </td>
                 <td width="10%">
                     <div class="w-100 btn-group" role="group">
-                        <a asp-controller="Item" asp-action="Index" asp-route-id="@obj.Id"
+                        <a asp-controller="Item" asp-action="Index" asp-route-id="@obj.Id" asp-route-UserId="@obj.UserCollectionId"
                         class="btn btn-primary mx-2">Details</a>
                     </div>
                 </td>

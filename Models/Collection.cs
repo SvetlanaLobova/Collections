@@ -17,6 +17,7 @@ namespace Collections.Models
         public FieldType? TypeField1 { get; set; }
         public string? FieldName2 { get; set; }
         public FieldType? TypeField2 { get; set; }
+        public virtual string? Image { get; set; }
         public virtual List<Item> Items { get; set; } = new List<Item>();
 
         [ForeignKey("AppUser")]

@@ -13,7 +13,10 @@ namespace Collections.Controllers
         }
         public IActionResult Index(int id)
         {
-            GlobalItemId.ItemId = id;
+            if (id != 0)
+            {
+                GlobalItemId.ItemId = id;
+            }
             var objCommentList = _db.Comments.Where(x => x.ItemId == GlobalItemId.ItemId);
             return View(objCommentList);
         }
@@ -30,7 +33,7 @@ namespace Collections.Controllers
             {
                 _db.Comments.Add(new Comment { Text = Text, ItemId = GlobalItemId.ItemId, UserId = GlobalAppUserId.UserId });
                 _db.SaveChanges();
-                return RedirectToAction("Index", new { id = GlobalItemId.ItemId });
+                return RedirectToAction("Index");
             }
             return View();
         }
@@ -46,7 +49,7 @@ namespace Collections.Controllers
         {
             _db.Comments.Remove(obj);
             _db.SaveChanges();
-            return RedirectToAction("Index", new { id = GlobalItemId.ItemId });
+            return RedirectToAction("Index");
         }
     }
 }

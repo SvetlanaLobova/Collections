@@ -1,4 +1,5 @@
 ﻿using Collections.Data;
+using Collections.Interfaces;
 using Collections.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,15 +9,20 @@ namespace Collections.Controllers
     public class CollectionController : Controller
     {
         private readonly ApplicationDbContext _db;
-        public CollectionController(ApplicationDbContext db)
+        private readonly IPhotoService _photoService;
+        public CollectionController(ApplicationDbContext db, IPhotoService photoService)
         {
             _db = db;
+            _photoService = photoService;
         }
         public IActionResult Index(string id)
         {
             if(User.IsInRole("admin"))
             {
-                GlobalAppUserId.UserId = id;
+                if (id != null)
+                {
+                    GlobalAppUserId.UserId = id;
+                }
             }
             var objCollectionsList = _db.Collections.Where(x => x.UserCollectionId == GlobalAppUserId.UserId);
             return View(objCollectionsList);
@@ -28,13 +34,29 @@ namespace Collections.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(string Name, string Description, CollectionTheme Theme, string? FieldName, FieldType? TypeField, string? FieldName1, FieldType? TypeField1, string? FieldName2, FieldType? TypeField2)
+        public async Task<IActionResult> Create(CreateCollectionViewModel collectionVM)
         {
             if (ModelState.IsValid)
             {
-                _db.Collections.Add(new Collection { Name = Name, Description = Description, Theme = Theme, UserCollectionId = GlobalAppUserId.UserId, FieldName = FieldName, TypeField = TypeField, FieldName1 = FieldName1, TypeField1 = TypeField1, FieldName2 = FieldName2, TypeField2 = TypeField2 });
+                var result = await _photoService.AddPhotoAsync(collectionVM.Image);
+                var collection = new Collection
+                {
+                    Name = collectionVM.Name,
+                    Description = collectionVM.Description,
+                    Theme = collectionVM.Theme,
+                    UserCollectionId = GlobalAppUserId.UserId,
+                    FieldName = collectionVM.FieldName,
+                    FieldName1 = collectionVM.FieldName1,
+                    FieldName2 = collectionVM.FieldName2,
+                    TypeField = collectionVM.TypeField,
+                    TypeField1 = collectionVM.TypeField1,
+                    TypeField2 = collectionVM.TypeField2
+                };
+                if (collectionVM.Image != null) 
+                    collection.Image = result.Url.ToString();
+                _db.Collections.Add(collection);
                 _db.SaveChanges();
-                return RedirectToAction("Index", new { id = GlobalAppUserId.UserId });
+                return RedirectToAction("Index");
             }
             return View();
         }
@@ -56,7 +78,7 @@ namespace Collections.Controllers
                 item.Theme = Theme;
                 item.UserCollectionId = GlobalAppUserId.UserId;
                 _db.SaveChanges();
-                return RedirectToAction("Index", new { id = GlobalAppUserId.UserId });
+                return RedirectToAction("Index");
             }
             return View();
         }
@@ -72,7 +94,7 @@ namespace Collections.Controllers
         {
             _db.Collections.Remove(obj);
             _db.SaveChanges();
-            return RedirectToAction("Index", new { id = GlobalAppUserId.UserId });
+            return RedirectToAction("Index");
         }
     }
 }

@@ -38,6 +38,7 @@ namespace Collections.Controllers
                         if (result.Succeeded)
                         {
                             GlobalAppUserId.UserId = user.Id;
+                            GlobalAppUserId.UserId1 = user.Id;
                             return RedirectToAction("Index", "Home");
                         }
                     }
@@ -98,6 +99,7 @@ namespace Collections.Controllers
         {
             await _signInManager.SignOutAsync();
             GlobalAppUserId.UserId = null;
+            GlobalAppUserId.UserId1 = null;
             return RedirectToAction("Login", "Account");
         }
     }

@@ -12,9 +12,14 @@ namespace Collections.Controllers
         {
             _db = db;
         }
-        public async Task<IActionResult> Index(int id, string tag, string name, SortState sortOrder = SortState.NameAsc)
+        public async Task<IActionResult> Index(int id, string tag, string name, string UserId, SortState sortOrder = SortState.NameAsc)
         {
             var items = _db.Items.Where(x => x.CollectionId == id);
+            if (UserId != null)
+            {
+                GlobalAppUserId.UserId2 = UserId;
+            }
+
             if (tag != null && name != null)
             {
                 items = items.Where(s => s.Name.Contains(name) && s.Tag.Contains(tag));

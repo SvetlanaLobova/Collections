@@ -8,7 +8,7 @@
         <div class="col-6">
             <h2 class="nav-item">List of item</h2>
         </div>
-        @if (User.Identity.IsAuthenticated)
+        @if (GlobalAppUserId.UserId1 == GlobalAppUserId.UserId2 || User.IsInRole("admin"))
         {
             <div class="col-6 text-end">
                 <a asp-controller="Item" asp-action="Create" class="btn btn-primary">
@@ -19,11 +19,14 @@
                 <a asp-controller="Collection" asp-action="Index" asp-route-id="@GlobalAppUserId.UserId" class="btn btn-primary">Go to my collections</a>
             </div>
             }
-        @if (!User.Identity.IsAuthenticated)
+        @if (!User.IsInRole("admin"))
         {
-            <div class="col-12 text-end">
-                <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back</a>
-            </div>
+            @if (!User.Identity.IsAuthenticated || GlobalAppUserId.UserId1 != GlobalAppUserId.UserId2)
+            {
+                <div class="col-12 text-end">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Back</a>
+                </div>
+            }
         }
     </div>
     <br />
@@ -179,7 +182,7 @@
                         class="btn btn-primary mx-2">Details</a>
                     </div>
                 </td>
-                @if (obj.UserId == GlobalAppUserId.UserId)
+                @if (obj.UserId == GlobalAppUserId.UserId || User.IsInRole("admin"))
                 {
                     <td width="11%">
                         <div class="w-100 btn-group" role="group">

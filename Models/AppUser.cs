@@ -20,5 +20,7 @@ namespace Collections.Models
     public static class GlobalAppUserId
     {
         public static string UserId { get; set; }
+        public static string UserId1 { get; set; }
+        public static string UserId2 { get; set; }
     }
 }
